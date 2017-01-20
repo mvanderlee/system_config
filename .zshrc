@@ -43,7 +43,7 @@ DISABLE_AUTO_TITLE="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=$HOME/.custom
+ZSH_CUSTOM=$HOME/custom
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -99,11 +99,6 @@ BULLETTRAIN_PROMPT_ORDER=(
   cmd_exec_time
 )
 BULLETTRAIN_STATUS_EXIT_SHOW=true
-
-BULLETTRAIN_GIT_EXCLUDE=(
-  /home/vanderlm
-)
-
 
 # key bindings
 bindkey "^[[1~" beginning-of-line
