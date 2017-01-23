@@ -408,7 +408,7 @@ prompt_git() {
     return
   fi
   for folder in "${BULLETTRAIN_GIT_EXCLUDE[@]}"; do
-	if [[ "${PWD}" == "${folder}" ]]; then
+	if [[ "${PWD}" =~ ^${folder}$ ]]; then
 	  return
 	fi
   done
