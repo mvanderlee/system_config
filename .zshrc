@@ -99,6 +99,7 @@ BULLETTRAIN_PROMPT_ORDER=(
   cmd_exec_time
 )
 BULLETTRAIN_STATUS_EXIT_SHOW=true
+BULLETTRAIN_CONTEXT_SHOW=true
 
 # key bindings
 bindkey "^[[1~" beginning-of-line
