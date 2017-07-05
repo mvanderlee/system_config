@@ -141,3 +141,7 @@ function zsh_ignore_git() {
 if [ -f ~/.export ]; then
 	source ~/.export
 fi
+
+if [ -f ~/.alias ]; then
+	source ~/.alias
+fi
