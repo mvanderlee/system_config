@@ -10,6 +10,9 @@ if [ -f ~/.antigen.zsh ]; then
     antigen use oh-my-zsh
     antigen bundle git
     antigen bundle pip
+    antigen bundle docker
+    antigen bundle jsontools
+    antigen bundle kubectl
     antigen bundle zsh-users/zsh-completions
     antigen bundle RobSis/zsh-completion-generator
 
@@ -39,6 +42,10 @@ BULLETTRAIN_STATUS_EXIT_SHOW=true
 BULLETTRAIN_CONTEXT_SHOW=true
 BULLETTRAIN_CONTEXT_FG=220
 BULLETTRAIN_CONTEXT_BG=57
+
+# zsh-syntax-highlighting
+# https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 
 # key bindings
 bindkey "^[[1~" beginning-of-line
