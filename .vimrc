@@ -27,7 +27,7 @@ set autoindent
 set pastetoggle=<F3>
 
 " Set Comment color
-hi Comment ctermfg=22
+hi Comment guifg=#7C7C7C     guibg=NONE        gui=NONE      ctermfg=darkgray    ctermbg=NONE        cterm=NONE
 
 " === Wildmenu ===
 set wildmenu
