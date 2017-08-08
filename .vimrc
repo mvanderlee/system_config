@@ -26,6 +26,9 @@ filetype indent on
 set autoindent
 set pastetoggle=<F3>
 
+" Set Comment color
+hi Comment ctermfg=22
+
 " === Wildmenu ===
 set wildmenu
 set wildmode=longest,list,full
