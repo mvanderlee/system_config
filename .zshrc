@@ -42,6 +42,7 @@ BULLETTRAIN_STATUS_EXIT_SHOW=true
 BULLETTRAIN_CONTEXT_SHOW=true
 BULLETTRAIN_CONTEXT_FG=220
 BULLETTRAIN_CONTEXT_BG=57
+BULLETTRAIN_VIRTUALENV_FG=black
 
 # zsh-syntax-highlighting
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
