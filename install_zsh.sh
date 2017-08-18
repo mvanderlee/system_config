@@ -25,7 +25,7 @@ fi
 mkdir ~/.antigen
 curl -L git.io/antigen > ~/.antigen/antigen.zsh
 
-wget -N -P ~/ https://github.com/DDuTCH/babun_config/raw/master/.zshrc
+wget https://github.com/DDuTCH/babun_config/raw/master/.zshrc -O ~/.zshrc
 
 # usermod -s /bin/zsh root
 echo "Please log out, then log in again."
