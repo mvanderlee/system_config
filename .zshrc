@@ -4,8 +4,9 @@ DISABLE_AUTO_TITLE="true"
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Antigen
-if [ -f ~/.antigen.zsh ]; then
-    source ~/.antigen.zsh
+export _ANTIGEN_INSTALL_DIR=~/.antigen
+if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
+    source $_ANTIGEN_INSTALL_DIR/antigen.zsh/antigen.zsh
 
     antigen use oh-my-zsh
     antigen bundle git
