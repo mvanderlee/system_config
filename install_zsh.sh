@@ -22,7 +22,8 @@ fi
 # rm -rf .oh-my-zsh .zshrc custom
 
 # antigen
-curl -L git.io/antigen > ~/.antigen.zsh
+mkdir ~/.antigen
+curl -L git.io/antigen > ~/.antigen/antigen.zsh
 
 wget -P ~/ https://github.com/DDuTCH/babun_config/raw/master/.zshrc
 
