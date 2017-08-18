@@ -6,7 +6,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Antigen
 export _ANTIGEN_INSTALL_DIR=~/.antigen
 if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
-    source $_ANTIGEN_INSTALL_DIR/antigen.zsh/antigen.zsh
+    source $_ANTIGEN_INSTALL_DIR/antigen.zsh
 
     antigen use oh-my-zsh
     antigen bundle git
