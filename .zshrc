@@ -14,6 +14,7 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     antigen bundle docker
     antigen bundle jsontools
     antigen bundle kubectl
+    antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-completions
     antigen bundle RobSis/zsh-completion-generator
 
