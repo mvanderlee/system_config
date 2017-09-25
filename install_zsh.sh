@@ -4,12 +4,14 @@
 if [ "$(command -v yum)" ]; then
 	yum makecache fast
 	yum install -y \
+		curl \
 		git \
 		wget \
 		zsh
 # Ubuntu (force-yes for bash on windows)
 elif [ "$(command -v apt-get)" ]; then
 	apt-get install -y --force-yes \
+		curl \
 		git \
 		wget \
 		zsh
