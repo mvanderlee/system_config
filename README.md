@@ -1,2 +1,2 @@
-# babun_config
-Holds my babun_config info
+# System_config
+Holds my system configuration files
