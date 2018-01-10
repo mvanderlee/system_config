@@ -6,6 +6,7 @@
 !.minttyrc
 !.inputrc
 !.tmux.conf
+!.powerlevel9k
 
 !*/
 !.vim/**
