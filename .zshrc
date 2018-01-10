@@ -5,6 +5,11 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Antigen
 export _ANTIGEN_INSTALL_DIR=~/.antigen
+
+if [ -f ~/.powerlevel9k ]; then
+    source ~/.powerlevel9k
+fi
+
 if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     source $_ANTIGEN_INSTALL_DIR/antigen.zsh
 
@@ -21,7 +26,8 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     # Syntax highlighting bundle
     antigen bundle zsh-users/zsh-syntax-highlighting
 
-    antigen theme DDuTCH/bullet-train.zsh bullet-train
+    #antigen theme DDuTCH/bullet-train.zsh bullet-train
+    antigen theme bhilburn/powerlevel9k powerlevel9k
 
     antigen apply
 fi

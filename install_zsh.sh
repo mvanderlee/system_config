@@ -26,8 +26,12 @@ mkdir ~/.antigen
 curl -L git.io/antigen > ~/.antigen/antigen.zsh
 
 wget https://github.com/DDuTCH/babun_config/raw/master/.zshrc -O ~/.zshrc
+wget https://github.com/DDuTCH/babun_config/raw/master/.powerlevel9k -O ~/.powerlevel9k
 
 # usermod -s /bin/zsh root
 echo "Please log out, then log in again."
 echo "If zsh isn't automatically set as your default shell, run:"
-echo "usermod -s /bin/zsh <username>"
+echo "chsh -s $(which zsh)"
+
+# For WSL, edit the shortcut for wsltty to start /bin/zsh
+#echo "usermod -s /bin/zsh <username>"
