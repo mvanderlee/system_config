@@ -14,8 +14,8 @@ if [ "$(command -v yum)" ]; then
 		wget \
 		vim \
 		cmake \
-		python-devel \
-		python2-pip \
+		python3-devel \
+		python3-pip \
 		libffi-devel \
 		libcurl-devel \
 		openssl-devel \
@@ -29,8 +29,8 @@ elif [ "$(command -v apt-get)" ]; then
 		vim \
 		build-essential \
 		cmake \
-		python-dev \
-		python-pip \
+		python3-dev \
+		python3-pip \
 		libffi-dev \
 		socat \
 		unzip \
@@ -54,20 +54,19 @@ rm v0.27.0.tar.gz
 wget https://pypi.python.org/packages/3a/6c/52c4ba6050b80e266d87783ccd4d39b76a0d2459965abf1c7bde54dd9a72/python-hglib-2.4.tar.gz#md5=0ef137ffe3239f17484ddb3170b5860e
 tar xzf python-hglib-2.4.tar.gz
 cd python-hglib-2.4
-python setup.py install
+python3 setup.py install
 cd
 rm -rf python-hglib-2.4*
 
-pip install --upgrade pip
-pip install \
+pip3 install --upgrade pip
+pip3 install \
 	psutil \
 	pygit2 \
-	bzr \
 	pyuv \
 	i3ipc \
 	powerline-status
 	
-wget https://github.com/DDuTCH/babun_config/raw/master/.vimrc
-wget https://github.com/DDuTCH/babun_config/raw/master/vim.zip
+wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc
+wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip
 unzip vim.zip
 rm vim.zip

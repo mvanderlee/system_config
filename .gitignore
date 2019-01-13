@@ -7,6 +7,7 @@
 !.inputrc
 !.tmux.conf
 !.powerlevel9k
+!install_*.sh
 
 !*/
 !.vim/**

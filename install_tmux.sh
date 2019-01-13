@@ -49,6 +49,6 @@ rm -rf tmux-2.5*
 
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-wget https://github.com/DDuTCH/babun_config/raw/master/.tmux.conf
+wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf
 
 echo "Open TMUX and press 'ctrl+a shift+i'. Ensure you're not nested in screen!'"

@@ -1,5 +1,6 @@
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
+export TERM="xterm-256color" 
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -32,26 +33,6 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     antigen apply
 fi
 # END Antigen
-
-BULLETTRAIN_PROMPT_ORDER=(
-  time
-  status
-  custom
-  context
-  dir
-  perl
-  ruby
-  virtualenv
-  nvm
-  go
-  git
-)
-BULLETTRAIN_STATUS_EXIT_SHOW=true
-BULLETTRAIN_CONTEXT_SHOW=true
-BULLETTRAIN_CONTEXT_FG=220
-BULLETTRAIN_CONTEXT_BG=57
-BULLETTRAIN_VIRTUALENV_FG=black
-BULLETTRAIN_GO_FG=blue
 
 # zsh-syntax-highlighting
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
@@ -98,4 +79,19 @@ fi
 
 if [ -f ~/.alias ]; then
 	source ~/.alias
+fi
+
+if [ -d $HOME/.nvm ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+if [ -d $HOME/.pyenv ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
+    fi
 fi
