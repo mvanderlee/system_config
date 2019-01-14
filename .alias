@@ -1,0 +1,17 @@
+alias lc='colorls'
+alias pylint='pylint --output-format=colorized'
+
+# Docker
+alias deit='docker exec -it'
+deitb() { docker exec -it "$1" /bin/bash; }
+deits() { docker exec -it "$1" /bin/sh; }
+
+# # docker no truncate
+alias dnt='docker ps --no-trunc'
+alias dka='docker stop $(docker ps -a -q)'
+alias drma='docker rm $(docker ps -a -q)'
+
+
+# psql https://github.com/kyokley/vim-psql-pager
+alias psql='PAGER=vimpsqlpager psql'
+alias pgcli='PAGER=vimpgclipager pgcli'

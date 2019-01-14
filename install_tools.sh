@@ -61,3 +61,8 @@ cd vim-psql-pager
 ./install.py
 cd -
 rm -rf vim-psql-pager
+
+# ptpython
+pip install ptpython
+mkdir ~/.ptpython
+wget -O ~/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py

@@ -2,11 +2,11 @@
 !.gitignore
 !.zshrc
 !.vimrc
-!.screenrc
-!.minttyrc
-!.inputrc
 !.tmux.conf
 !.powerlevel9k
+!.alias
+!.ptpython-config.py
+!terminal.profile
 !install_*.sh
 
 !*/
