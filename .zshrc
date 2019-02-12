@@ -15,11 +15,14 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     source $_ANTIGEN_INSTALL_DIR/antigen.zsh
 
     antigen use oh-my-zsh
+    # antigen bundle aws # doesn't work with pyenv
     antigen bundle git
     antigen bundle pip
     antigen bundle docker
+    antigen bundle docker-compose
     antigen bundle jsontools
     antigen bundle kubectl
+    antigen bundle tmux
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-completions
     antigen bundle RobSis/zsh-completion-generator
@@ -93,5 +96,9 @@ if [ -d $HOME/.pyenv ]; then
     if command -v pyenv 1>/dev/null 2>&1; then
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)"
+    fi
+
+    if [ -f "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh" ]; then
+        source "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh"
     fi
 fi

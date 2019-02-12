@@ -35,6 +35,21 @@ git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pye
 
 
 # extra packages
+
+# For RedHat/CentOS
+if [ "$(command -v yum)" ]; then
+	yum makecache fast
+	yum install -y \
+        zlib \
+        zlib-devel \
+        readline \
+        readline-devel \
+        bzip2 \
+        bzip2-devel \
+        sqlite-devel \
+        openssl-devel \
+        patch \
+        htop
 # Ubuntu (force-yes for bash on windows)
 if [ "$(command -v apt-get)" ]; then
 	apt-get install -y --force-yes \
@@ -47,11 +62,15 @@ if [ "$(command -v apt-get)" ]; then
         libsqlite3-dev \
         openssl \
         libssl-dev \
-        postgresql-client
+        postgresql-client \
+        htop
 else
 	echo "No suitable package manager found. (yum, apt-get)"
 	exit 127
 fi
+
+pip install awscli
+
 
 # pgcli
 pip install pgcli
@@ -66,3 +85,24 @@ rm -rf vim-psql-pager
 pip install ptpython
 mkdir ~/.ptpython
 wget -O ~/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
+
+
+# docker
+apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+apt-get update
+apt-get install docker-ce
+
+curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
+sysctl -w vm.max_map_count=262144
