@@ -76,6 +76,17 @@ function zsh_ignore_git() {
 	git config --add oh-my-zsh.hide-dirty 1
 }
 
+# cd hook
+function chpwd() {
+    if [ -d $HOME/.goenv ]; then
+        if [ -f $PWD/.go-path ]; then
+            export GOPATH="$PWD"
+        else
+            export GOPATH="$(realpath -m ~/go/$(goenv version | head -n1 | awk '{print $1;}'))"
+        fi
+    fi
+}
+
 if [ -f ~/.export ]; then
 	source ~/.export
 fi
