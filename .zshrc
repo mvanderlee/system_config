@@ -108,6 +108,8 @@ if [ -d $HOME/.goenv ]; then
     export PATH="$GOENV_ROOT/bin:$PATH"
     if command -v goenv 1>/dev/null 2>&1; then
         eval "$(goenv init -)"
+        export PATH="$GOROOT/bin:$PATH"
+        export PATH="$GOPATH/bin:$PATH"
     fi
 fi
 
