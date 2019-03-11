@@ -33,6 +33,11 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | 
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
 
+# GoEnv
+git clone https://github.com/syndbg/goenv.git ~/.goenv
+
+# RbEnv
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 
 # extra packages
 

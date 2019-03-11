@@ -1,6 +1,6 @@
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-export TERM="xterm-256color" 
+export TERM="xterm-256color"
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -102,3 +102,20 @@ if [ -d $HOME/.pyenv ]; then
         source "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh"
     fi
 fi
+
+if [ -d $HOME/.goenv ]; then
+    export GOENV_ROOT="$HOME/.goenv"
+    export PATH="$GOENV_ROOT/bin:$PATH"
+    if command -v goenv 1>/dev/null 2>&1; then
+        eval "$(goenv init -)"
+    fi
+fi
+
+if [ -d $HOME/.rbenv ]; then
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    if command -v goenv 1>/dev/null 2>&1; then
+        eval "$(rbenv init -)"
+    fi
+fi
+
+[[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
