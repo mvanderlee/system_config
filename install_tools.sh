@@ -113,3 +113,10 @@ curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compo
 chmod +x /usr/local/bin/docker-compose
 
 sysctl -w vm.max_map_count=262144
+
+if [ -z $SUDO_USER ]; then 
+	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
+	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.goenv
+	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.rbenv
+	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.ptpython
+fi

@@ -32,6 +32,11 @@ curl -L git.io/antigen > $USER_HOME/.antigen/antigen.zsh
 wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $USER_HOME/.zshrc
 wget https://github.com/MichielVanderlee/system_config/raw/master/.powerlevel9k -O $USER_HOME/.powerlevel9k
 
+if [ -z $SUDO_USER ]; then 
+	chown $SUDO_USER:$SUDO_USER $USER_HOME/.zshrc
+	chown $SUDO_USER:$SUDO_USER $USER_HOME/.powerlevel9k
+fi
+
 chsh -s $(which zsh) $(whoami)
 
 # usermod -s /bin/zsh root
