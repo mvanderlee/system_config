@@ -26,7 +26,7 @@ fi
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
 # antigen
-mkdir ~/.antigen
+mkdir $USER_HOME/.antigen
 curl -L git.io/antigen > $USER_HOME/.antigen/antigen.zsh
 
 wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $USER_HOME/.zshrc
@@ -35,6 +35,7 @@ wget https://github.com/MichielVanderlee/system_config/raw/master/.powerlevel9k 
 if [ -n "$SUDO_USER" ]; then 
 	chown $SUDO_USER:$SUDO_USER $USER_HOME/.zshrc
 	chown $SUDO_USER:$SUDO_USER $USER_HOME/.powerlevel9k
+	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.antigen
 fi
 
 chsh -s $(which zsh) $(whoami)
