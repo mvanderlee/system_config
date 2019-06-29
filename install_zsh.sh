@@ -23,12 +23,14 @@ fi
 # remove files from previous version of this script
 # rm -rf .oh-my-zsh .zshrc custom
 
+USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
+
 # antigen
 mkdir ~/.antigen
-curl -L git.io/antigen > $HOME/.antigen/antigen.zsh
+curl -L git.io/antigen > $USER_HOME/.antigen/antigen.zsh
 
-wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $HOME/.zshrc
-wget https://github.com/MichielVanderlee/system_config/raw/master/.powerlevel9k -O $HOME/.powerlevel9k
+wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $USER_HOME/.zshrc
+wget https://github.com/MichielVanderlee/system_config/raw/master/.powerlevel9k -O $USER_HOME/.powerlevel9k
 
 chsh -s $(which zsh) $(whoami)
 

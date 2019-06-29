@@ -47,8 +47,10 @@ sudo make install
 cd
 rm -rf tmux-2.5*
 
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
-wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $HOME/.tmux.conf
+git clone https://github.com/tmux-plugins/tpm $USER_HOME/.tmux/plugins/tpm
+
+wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $USER_HOME/.tmux.conf
 
 echo "Open TMUX and press 'ctrl+a shift+i'. Ensure you're not nested in screen!'"

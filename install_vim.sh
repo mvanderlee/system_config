@@ -67,7 +67,9 @@ $(which python3) -m pip install \
 	i3ipc \
 	powerline-status
 	
-wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $HOME/.vimrc
+USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
+
+wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $USER_HOME/.vimrc
 wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip 
-unzip vim.zip -d $HOME
+unzip vim.zip -d $USER_HOME
 rm vim.zip

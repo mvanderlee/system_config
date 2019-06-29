@@ -1,21 +1,23 @@
 #!/bin/bash
 
+USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
+
 # Set theme
-wget -P "$HOME/Pictures/" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
+wget -P "$USER_HOME/Pictures/" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
 
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
 gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
-gsettings set org.gnome.desktop.background picture-uri "file://$HOME/Pictures/RS_Siege1.jpg"
-gsettings set org.gnome.desktop.screensaver picture-uri "file://$HOME/Pictures/RS_Siege1.jpg"
+gsettings set org.gnome.desktop.background picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
+gsettings set org.gnome.desktop.screensaver picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
 
 # Install fonts
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
-mkdir -p ~/.fonts/truetype/FuraCode
-unzip FiraCode.zip -d ~/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
+mkdir -p $USER_HOME/.fonts/truetype/FuraCode
+unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
 
 # wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
-# mkdir -p ~/.fonts/opentype/FuraMono
-# unzip FiraMono.zip -d ~/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
+# mkdir -p $HOME/.fonts/opentype/FuraMono
+# unzip FiraMono.zip -d $HOME/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
 
 sudo fc-cache -f -v
 gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
@@ -30,14 +32,14 @@ cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
 # PyEnv
-git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
+git clone https://github.com/pyenv/pyenv.git $USER_HOME/.pyenv
+git clone https://github.com/pyenv/pyenv-virtualenv.git $USER_HOME/.pyenv/plugins/pyenv-virtualenv
 
 # GoEnv
-git clone https://github.com/syndbg/goenv.git ~/.goenv
+git clone https://github.com/syndbg/goenv.git $USER_HOME/.goenv
 
 # RbEnv
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/rbenv.git $USER_HOME/.rbenv
 
 # extra packages
 
@@ -88,8 +90,8 @@ rm -rf vim-psql-pager
 
 # ptpython
 pip install ptpython
-mkdir ~/.ptpython
-wget -O ~/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
+mkdir $USER_HOME/.ptpython
+wget -O $USER_HOME/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
 
 
 # docker
