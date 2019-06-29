@@ -58,15 +58,16 @@ python3 setup.py install
 cd
 rm -rf python-hglib-2.4*
 
-pip3 install --upgrade pip
-pip3 install \
+# which python3 for ec2 instances where python 2 is the default
+$(which python3) -m pip install --upgrade pip
+$(which python3) -m pip install \
 	psutil \
 	pygit2 \
 	pyuv \
 	i3ipc \
 	powerline-status
 	
-wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc
-wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip
-unzip vim.zip
+wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $HOME/.vimrc
+wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip 
+unzip vim.zip -d $HOME
 rm vim.zip
