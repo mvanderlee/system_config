@@ -114,7 +114,7 @@ chmod +x /usr/local/bin/docker-compose
 
 sysctl -w vm.max_map_count=262144
 
-if [ -z $SUDO_USER ]; then 
+if [ -n "$SUDO_USER" ]; then 
 	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
 	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.goenv
 	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.rbenv

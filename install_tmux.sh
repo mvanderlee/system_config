@@ -53,7 +53,7 @@ git clone https://github.com/tmux-plugins/tpm $USER_HOME/.tmux/plugins/tpm
 
 wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $USER_HOME/.tmux.conf
 
-if [ -z $SUDO_USER ]; then 
+if [ -n "$SUDO_USER" ]; then 
 	chown $SUDO_USER:$SUDO_USER $USER_HOME/.tmux.conf
 	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.tmux
 fi
