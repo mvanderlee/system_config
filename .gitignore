@@ -13,6 +13,7 @@
 !.vim/**
 !custom/**
 !assets/**
+!docs/**
 
 .gem/
 .tmux/
