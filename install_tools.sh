@@ -93,6 +93,14 @@ pip install ptpython
 mkdir $USER_HOME/.ptpython
 wget -O $USER_HOME/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
 
+# colorls
+gem install colorls
+rbenv rehash
+rehash
+
+# ammonite-repl
+curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 > /usr/local/bin/amm
+chmod +x /usr/local/bin/amm
 
 # docker
 apt-get install \
