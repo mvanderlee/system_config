@@ -3,7 +3,8 @@
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
 # Set theme
-wget -P "$USER_HOME/Pictures/" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
+echo "Setting Theme"
+wget -qO -P "$USER_HOME/Pictures/" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
 
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
 gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
@@ -11,35 +12,54 @@ gsettings set org.gnome.desktop.background picture-uri "file://$USER_HOME/Pictur
 gsettings set org.gnome.desktop.screensaver picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
 
 # Install fonts
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
-mkdir -p $USER_HOME/.fonts/truetype/FuraCode
-unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
+CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
+if [ "$CURRENT_FONT" != "'FuraCode Nerd Font 11'" ]; then
+	echo "Install Fonts"
+	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
+	mkdir -p $USER_HOME/.fonts/truetype/FuraCode
+	unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
 
-# wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
-# mkdir -p $HOME/.fonts/opentype/FuraMono
-# unzip FiraMono.zip -d $HOME/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
+	# wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
+	# mkdir -p $HOME/.fonts/opentype/FuraMono
+	# unzip FiraMono.zip -d $HOME/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
 
-sudo fc-cache -f -v
-gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
-
+	sudo fc-cache -f -v
+	gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
+fi
 
 # Set Terminal Theme
-wget https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
+echo "Setting Terminal Theme"
+wget -qO terminal.profile https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
 cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ -
 
 
 # NVM
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+if [[ ! -d "$USER_HOME/.nvm" ]]; then
+	echo "Installing NVM"
+	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.35.2/install.sh | bash
+fi
 
 # PyEnv
-git clone https://github.com/pyenv/pyenv.git $USER_HOME/.pyenv
-git clone https://github.com/pyenv/pyenv-virtualenv.git $USER_HOME/.pyenv/plugins/pyenv-virtualenv
+if [[ ! -d "$USER_HOME/.pyenv" ]]; then
+	echo "Installing pyenv"
+	git clone https://github.com/pyenv/pyenv.git $USER_HOME/.pyenv
+fi
+if [[ ! -d "$USER_HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
+	echo "Installing pyenv-virtualenv"
+	git clone https://github.com/pyenv/pyenv-virtualenv.git $USER_HOME/.pyenv/plugins/pyenv-virtualenv
+fi
 
 # GoEnv
-git clone https://github.com/syndbg/goenv.git $USER_HOME/.goenv
+if [[ ! -d "$USER_HOME/.goenv" ]]; then
+	echo "Installing goenv"
+	git clone https://github.com/syndbg/goenv.git $USER_HOME/.goenv
+fi
 
 # RbEnv
-git clone https://github.com/rbenv/rbenv.git $USER_HOME/.rbenv
+if [[ ! -d "$USER_HOME/.rbenv" ]]; then
+	echo "Installing rbenv"
+	git clone https://github.com/rbenv/rbenv.git $USER_HOME/.rbenv
+fi
 
 # extra packages
 
@@ -57,6 +77,7 @@ if [ "$(command -v yum)" ]; then
         openssl-devel \
         patch \
         htop
+fi
 # Ubuntu (force-yes for bash on windows)
 if [ "$(command -v apt-get)" ]; then
 	apt-get install -y --force-yes \
@@ -66,6 +87,7 @@ if [ "$(command -v apt-get)" ]; then
         libreadline7 \
         libreadline-dev \
         libbz2-dev \
+		libpq-dev \
         libsqlite3-dev \
         openssl \
         libssl-dev \
@@ -82,11 +104,11 @@ pip install awscli
 # pgcli
 pip install pgcli
 
-git clone git@github.com:kyokley/vim-psql-pager.git
-cd vim-psql-pager
+git clone https://github.com/kyokley/psql-pager.git
+cd psql-pager
 ./install.py
 cd -
-rm -rf vim-psql-pager
+rm -rf psql-pager
 
 # ptpython
 pip install ptpython
@@ -103,7 +125,7 @@ curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 >
 chmod +x /usr/local/bin/amm
 
 # docker
-apt-get install \
+apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -115,7 +137,7 @@ add-apt-repository \
    $(lsb_release -cs) \
    stable"
 apt-get update
-apt-get install docker-ce
+apt-get install -y docker-ce
 
 curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
