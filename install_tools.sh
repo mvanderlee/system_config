@@ -35,6 +35,45 @@ echo "Setting Terminal Theme"
 wget -qO terminal.profile https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
 cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ -
 
+# extra packages
+
+# For RedHat/CentOS
+if [ "$(command -v yum)" ]; then
+	yum makecache fast
+	yum install -y \
+        zlib \
+        zlib-devel \
+        readline \
+        readline-devel \
+        bzip2 \
+        bzip2-devel \
+        sqlite-devel \
+        openssl-devel \
+        patch \
+        htop
+fi
+# Ubuntu (force-yes for bash on windows)
+if [ "$(command -v apt-get)" ]; then
+	apt-get install -y --force-yes \
+		zlibc \
+        zlib1g \
+        zlib1g-dev \
+        libreadline7 \
+        libreadline-dev \
+        libbz2-dev \
+		libpq-dev \
+        libsqlite3-dev \
+        openssl \
+        libssl-dev \
+        postgresql-client \
+        htop \
+        net-tools \
+        ssh
+else
+	echo "No suitable package manager found. (yum, apt-get)"
+	exit 127
+fi
+
 
 # NVM
 if [[ ! -d "$USER_HOME/.nvm" ]]; then
@@ -105,43 +144,6 @@ if [[ ! -d "$USER_HOME/.rbenv" ]]; then
     rbenv global $(rbenv install -l | grep -v - | tail -1)
 fi
 
-# extra packages
-
-# For RedHat/CentOS
-if [ "$(command -v yum)" ]; then
-	yum makecache fast
-	yum install -y \
-        zlib \
-        zlib-devel \
-        readline \
-        readline-devel \
-        bzip2 \
-        bzip2-devel \
-        sqlite-devel \
-        openssl-devel \
-        patch \
-        htop
-fi
-# Ubuntu (force-yes for bash on windows)
-if [ "$(command -v apt-get)" ]; then
-	apt-get install -y --force-yes \
-		zlibc \
-        zlib1g \
-        zlib1g-dev \
-        libreadline7 \
-        libreadline-dev \
-        libbz2-dev \
-		libpq-dev \
-        libsqlite3-dev \
-        openssl \
-        libssl-dev \
-        postgresql-client \
-        htop \
-        ssh
-else
-	echo "No suitable package manager found. (yum, apt-get)"
-	exit 127
-fi
 
 pip install awscli
 
