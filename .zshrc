@@ -132,3 +132,5 @@ if [ -d $HOME/.rbenv ]; then
 fi
 
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
+
+[[ -x "$(command -v aws_zsh_completer.sh)" ]] && source "$(pyenv which aws_zsh_completer.sh)"
