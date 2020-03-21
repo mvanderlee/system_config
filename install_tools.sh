@@ -6,7 +6,7 @@ USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER
 echo "Setting Theme"
 CURRENT_PIC=$(gsettings get org.gnome.desktop.screensaver picture-uri)
 if [ "$CURRENT_FONT" != "'file://$USER_HOME/Pictures/RS_Siege1.jpg'" ]; then
-    wget -qO -P "$USER_HOME/Pictures/" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
+    wget -qO "$USER_HOME/Pictures/RS_Siege1.jpg" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
 
     gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
     gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
@@ -41,34 +41,39 @@ cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd
 if [ "$(command -v yum)" ]; then
 	yum makecache fast
 	yum install -y \
-        zlib \
-        zlib-devel \
-        readline \
-        readline-devel \
         bzip2 \
         bzip2-devel \
-        sqlite-devel \
+        htop \
         openssl-devel \
         patch \
-        htop
+        readline \
+        readline-devel \
+        sqlite-devel \
+        zlib \
+        zlib-devel 
 fi
 # Ubuntu (force-yes for bash on windows)
 if [ "$(command -v apt-get)" ]; then
 	apt-get install -y --force-yes \
-		zlibc \
-        zlib1g \
-        zlib1g-dev \
+        htop \
+        jq \
+        libbz2-dev \
+        libffi-dev \
         libreadline7 \
         libreadline-dev \
-        libbz2-dev \
 		libpq-dev \
         libsqlite3-dev \
-        openssl \
         libssl-dev \
-        postgresql-client \
-        htop \
+        libtool \
         net-tools \
-        ssh
+        openssl \
+        postgresql-client \
+        python \    # Install a system version as fallback before we install pyenv
+        python3 \   # Install a system version as fallback before we install pyenv
+        ssh \
+		zlibc \
+        zlib1g \
+        zlib1g-dev
 else
 	echo "No suitable package manager found. (yum, apt-get)"
 	exit 127
@@ -93,10 +98,16 @@ fi
 if [[ ! -d "$USER_HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
 	echo "Installing pyenv-virtualenv"
 	git clone https://github.com/pyenv/pyenv-virtualenv.git $USER_HOME/.pyenv/plugins/pyenv-virtualenv
+    if [ -n "$SUDO_USER" ]; then 
+        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
+    fi
 fi
 if [[ ! -d "$USER_HOME/.pyenv/plugins/pyenv-install-latest" ]]; then
 	echo "Installing pyenv-install-latest"
     git clone https://github.com/momo-lab/pyenv-install-latest.git $USER_HOME/.pyenv/plugins/pyenv-install-latest
+    if [ -n "$SUDO_USER" ]; then 
+        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
+    fi
 fi
 if [ -z ${PYENV_ROOT+x} ]; then
     echo "Adding pyenv to shell session"
@@ -115,6 +126,10 @@ if [ -z ${PYENV_ROOT+x} ]; then
     pyenv install-latest
     # Set latest version as global
     pyenv global "$(pyenv install-latest --print)"
+
+    if [ -n "$SUDO_USER" ]; then 
+        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
+    fi
 fi
 
 
@@ -134,12 +149,12 @@ if [[ ! -d "$USER_HOME/.rbenv" ]]; then
 	git clone https://github.com/rbenv/rbenv.git $USER_HOME/.rbenv
     mdkir -p $USER_HOME/.rbenv/plugins
     git clone https://github.com/rbenv/ruby-build.git $USER_HOME/.rbenv/plugins/ruby-build
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.rbenv
-    fi
 
     export PATH="$HOME/.rbenv/bin:$PATH"
     eval "$(rbenv init -)"
+    if [ -n "$SUDO_USER" ]; then 
+        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.rbenv
+    fi
     rbenv install $(rbenv install -l | grep -v - | tail -1)
     rbenv global $(rbenv install -l | grep -v - | tail -1)
 fi
@@ -147,17 +162,16 @@ fi
 
 pip install awscli
 
-
 # pgcli
 pip install pgcli
 
-if [[ ! -d "$USER_HOME/.psql-pager" ]]; then
-    echo "Installing pgcli pager"
-    git clone https://github.com/mvanderlee/psql-pager.git $USER_HOME/.psql-pager
-    cd $USER_HOME/.psql-pager
-    python3 ./install.py
-    cd -
-fi
+echo "Installing Homebrew"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.zprofile
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
+echo "Installing pspg"
+brew install pspg
 
 # ptpython
 if [[ ! -d "$USER_HOME/.ptpython" ]]; then
@@ -171,7 +185,7 @@ if [[ ! -d "$USER_HOME/.ptpython" ]]; then
 fi
 
 # colorls
-echo "Installing ptpython"
+echo "Installing colorls"
 gem install colorls
 rbenv rehash
 rehash
@@ -199,3 +213,9 @@ curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compo
 chmod +x /usr/local/bin/docker-compose
 
 sysctl -w vm.max_map_count=262144
+
+# echo "Installing rust"
+# curl https://sh.rustup.rs -sSf | sh
+
+# install `rq`
+# curl -LSfs https://japaric.github.io/trust/install.sh | sh -s -- --git dflemstr/rq
