@@ -66,6 +66,8 @@ nnoremap <F9> :Black<CR>
 
 " Enable deoplete
 let g:deoplete#enable_at_startup = 1
+" Enable powerline font
+let g:airline_powerline_fonts = 1
 
 " === Wildmenu ===
 set wildmenu
