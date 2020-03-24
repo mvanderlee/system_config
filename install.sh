@@ -2,12 +2,51 @@
 
 set -e
 
+# Enable or disable colored logs
+COLOR_LOG=true
+
+## Color coded logging - https://misc.flogisoft.com/bash/tip_colors_and_formatting
+error() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[31m$1[0m"  # Red FG
+  else
+    echo "$1"
+  fi
+}
+
+warn() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[33m$1[0m"  # Yellow FG
+  else
+    echo "$1"
+  fi
+}
+
+info() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[32m$1[0m"  # Green FG
+  else
+    echo "$1"
+  fi
+}
+
+debug() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[36m$1[0m"  # Cyan FG
+  else
+    echo "$1"
+  fi
+}
+
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
 # Install packages
+info "Updating packages"
 apt update
-apt upgrade
-apt install \
+apt upgrade -y
+
+info "Installing packages"
+apt install -y \
   automake \
   autoconf \
   bison \
@@ -40,9 +79,11 @@ apt install \
   zlib1g-dev
 
 # Install zsh
+info "Installing ZSH"
 wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | sudo bash
 
 # Install Homebrew
+info "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.zprofile
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
@@ -51,10 +92,13 @@ brew install jq
 brew install openssl readline sqlite3 xz zlib
 
 # Install adsf
+info "Installing asdf"
 brew install asdf
 
 # Install plugins
 asdf_install() {
+  info "  - Installing $1"
+
   # Get latest version so we can install and set it as global
   if [ "$2" ]; then
     latest="$(asdf latest $1 $2)"
@@ -71,6 +115,7 @@ asdf_install() {
   asdf global "$1" "$latest"
 }
 
+info "Installing asdf plugins"
 asdf_install golang
 asdf_install java adopt-openjdk-8u242-b08
 asdf_install maven
@@ -79,7 +124,9 @@ asdf_install python 2.7
 asdf_install python 3.7
 asdf_install ruby
 
-# Install tmux
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | sudo bash
 # Install vim 
+info "Installing Vim"
 wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | sudo bash
+# Install tmux
+info "Installing Tmux"
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | sudo bash
