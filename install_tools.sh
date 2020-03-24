@@ -1,39 +1,57 @@
 #!/bin/bash
 
+set -e
+
+# Enable or disable colored logs
+COLOR_LOG=true
+
+## Color coded logging - https://misc.flogisoft.com/bash/tip_colors_and_formatting
+error() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[31m$1[0m"  # Red FG
+  else
+    echo "$1"
+  fi
+}
+
+warn() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[33m$1[0m"  # Yellow FG
+  else
+    echo "$1"
+  fi
+}
+
+info() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[32m$1[0m"  # Green FG
+  else
+    echo "$1"
+  fi
+}
+
+debug() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[36m$1[0m"  # Cyan FG
+  else
+    echo "$1"
+  fi
+}
+
+# Check for dependencies
+declare -a dependencies=("asdf" "brew" "gem" "pip")
+deps_missing=0
+for i in "${dependencies[@]}"; do
+    if [ ! "$(command -v $i)" ]; then
+        error "Dependency '$i' is missing!"
+        deps_missing=1
+    fi
+done
+if [ $deps_missing ]; then
+	exit 127
+fi
+
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
-
-# Set theme
-echo "Setting Theme"
-CURRENT_PIC=$(gsettings get org.gnome.desktop.screensaver picture-uri)
-if [ "$CURRENT_FONT" != "'file://$USER_HOME/Pictures/RS_Siege1.jpg'" ]; then
-    wget -qO "$USER_HOME/Pictures/RS_Siege1.jpg" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
-
-    gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
-    gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
-    gsettings set org.gnome.desktop.background picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
-    gsettings set org.gnome.desktop.screensaver picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
-fi
-
-# Install fonts
-CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
-if [ "$CURRENT_FONT" != "'FuraCode Nerd Font 11'" ]; then
-	echo "Install Fonts"
-	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
-	mkdir -p $USER_HOME/.fonts/truetype/FuraCode
-	unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
-
-	# wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
-	# mkdir -p $HOME/.fonts/opentype/FuraMono
-	# unzip FiraMono.zip -d $HOME/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
-
-	sudo fc-cache -f -v
-	gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
-fi
-
-# Set Terminal Theme
-echo "Setting Terminal Theme"
-wget -qO terminal.profile https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
-cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ -
 
 # extra packages
 
@@ -49,6 +67,8 @@ if [ "$(command -v yum)" ]; then
         readline \
         readline-devel \
         sqlite-devel \
+        unzip \
+        wget \
         zlib \
         zlib-devel 
 fi
@@ -56,108 +76,52 @@ fi
 if [ "$(command -v apt-get)" ]; then
 	apt-get install -y --force-yes \
         htop \
-        jq \
-        libbz2-dev \
-        libffi-dev \
-        libreadline7 \
-        libreadline-dev \
-		libpq-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        libtool \
         net-tools \
         openssl \
         postgresql-client \
-        python \    # Install a system version as fallback before we install pyenv
-        python3 \   # Install a system version as fallback before we install pyenv
         ssh \
+        unzip \
+        wget \
 		zlibc \
         zlib1g \
         zlib1g-dev
 else
-	echo "No suitable package manager found. (yum, apt-get)"
+	error "No suitable package manager found. (yum, apt-get)"
 	exit 127
 fi
 
+# Set theme
+info "Setting Theme"
+CURRENT_PIC=$(gsettings get org.gnome.desktop.screensaver picture-uri)
+if [ "$CURRENT_FONT" != "'file://$USER_HOME/Pictures/RS_Siege1.jpg'" ]; then
+    wget -qO "$USER_HOME/Pictures/RS_Siege1.jpg" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
 
-# NVM
-if [[ ! -d "$USER_HOME/.nvm" ]]; then
-	echo "Installing NVM"
-	wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.35.2/install.sh | bash
+    gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+    gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
+    gsettings set org.gnome.desktop.background picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
+    gsettings set org.gnome.desktop.screensaver picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
 fi
 
-# PyEnv
-if [[ ! -d "$USER_HOME/.pyenv" ]]; then
-	echo "Installing pyenv"
-	git clone https://github.com/pyenv/pyenv.git $USER_HOME/.pyenv
+# Install fonts
+CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
+if [ "$CURRENT_FONT" != "'FuraCode Nerd Font 11'" ]; then
+	info "Install Fonts"
+	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
+	mkdir -p $USER_HOME/.fonts/truetype/FuraCode
+	unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
 
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
-    fi
-fi
-if [[ ! -d "$USER_HOME/.pyenv/plugins/pyenv-virtualenv" ]]; then
-	echo "Installing pyenv-virtualenv"
-	git clone https://github.com/pyenv/pyenv-virtualenv.git $USER_HOME/.pyenv/plugins/pyenv-virtualenv
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
-    fi
-fi
-if [[ ! -d "$USER_HOME/.pyenv/plugins/pyenv-install-latest" ]]; then
-	echo "Installing pyenv-install-latest"
-    git clone https://github.com/momo-lab/pyenv-install-latest.git $USER_HOME/.pyenv/plugins/pyenv-install-latest
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
-    fi
-fi
-if [ -z ${PYENV_ROOT+x} ]; then
-    echo "Adding pyenv to shell session"
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    if command -v pyenv 1>/dev/null 2>&1; then
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
+	# wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
+	# mkdir -p $HOME/.fonts/opentype/FuraMono
+	# unzip FiraMono.zip -d $HOME/.fonts/opentype/FuraMono -x '*Windows Compatible.otf'
 
-    if [ -f "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh" ]; then
-        source "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh"
-    fi
-
-    echo "Installing latest python"
-    pyenv install-latest
-    # Set latest version as global
-    pyenv global "$(pyenv install-latest --print)"
-
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.pyenv
-    fi
+	sudo fc-cache -f -v
+	gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
 fi
 
-
-# GoEnv
-if [[ ! -d "$USER_HOME/.goenv" ]]; then
-	echo "Installing goenv"
-	git clone https://github.com/syndbg/goenv.git $USER_HOME/.goenv
-    
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.goenv
-    fi
-fi
-
-# RbEnv
-if [[ ! -d "$USER_HOME/.rbenv" ]]; then
-	echo "Installing rbenv"
-	git clone https://github.com/rbenv/rbenv.git $USER_HOME/.rbenv
-    mdkir -p $USER_HOME/.rbenv/plugins
-    git clone https://github.com/rbenv/ruby-build.git $USER_HOME/.rbenv/plugins/ruby-build
-
-    export PATH="$HOME/.rbenv/bin:$PATH"
-    eval "$(rbenv init -)"
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.rbenv
-    fi
-    rbenv install $(rbenv install -l | grep -v - | tail -1)
-    rbenv global $(rbenv install -l | grep -v - | tail -1)
-fi
+# Set Terminal Theme
+info "Setting Terminal Theme"
+wget -qO terminal.profile https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
+cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ -
 
 
 pip install awscli
@@ -165,17 +129,12 @@ pip install awscli
 # pgcli
 pip install pgcli
 
-echo "Installing Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.zprofile
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
-echo "Installing pspg"
+info "Installing pspg"
 brew install pspg
 
 # ptpython
 if [[ ! -d "$USER_HOME/.ptpython" ]]; then
-    echo "Installing ptpython"
+    info "Installing ptpython"
     pip install ptpython
     mkdir $USER_HOME/.ptpython
     wget -O $USER_HOME/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
@@ -185,7 +144,7 @@ if [[ ! -d "$USER_HOME/.ptpython" ]]; then
 fi
 
 # colorls
-echo "Installing colorls"
+info "Installing colorls"
 gem install colorls
 rbenv rehash
 rehash

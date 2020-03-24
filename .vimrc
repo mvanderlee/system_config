@@ -29,6 +29,45 @@ set pastetoggle=<F3>
 " Set Comment color
 hi Comment guifg=#7C7C7C     guibg=NONE        gui=NONE      ctermfg=darkgray    ctermbg=NONE        cterm=NONE
 
+" """"""""""""""""""
+" PLUGIN MANAGEMENT!
+" """"""""""""""""""
+call plug#begin('~/.vim/plugged')
+
+Plug 'vim-airline/vim-airline'
+
+" Autocomplete
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+
+" Python autocomplete
+" Plug 'davidhalter/jedi-vim'
+
+" Python formatter
+Plug 'psf/black'
+
+" File tree
+Plug 'scrooloose/nerdTree'
+
+" Automatic commenting
+Plug 'scrooloose/nerdcommenter'
+
+" quoting/parenthesizing
+Plug 'tpope/vim-surround'
+
+" Editorconfig support
+Plug 'editorconfig/editorconfig-vim'
+
+call plug#end()
+
+" File tree toggle with ctrl+n
+nmap <C-n> :NERDTreeToggle<CR>
+" Run Black on F9
+nnoremap <F9> :Black<CR>
+
+" Enable deoplete
+let g:deoplete#enable_at_startup = 1
+
 " === Wildmenu ===
 set wildmenu
 set wildmode=longest,list,full
@@ -45,10 +84,6 @@ set autoread
 " Show More Info in the statusline, without going overboard 
 set laststatus=2
 set statusline=%<%f\ %m%r%y%=%-35.(Line:\ %l/%L\ [%p%%][Format=%{&ff}]%)
-
-python3 from powerline.vim import setup as powerline_setup
-python3 powerline_setup()
-python3 del powerline_setup
 
 " Set default tab width
 set tabstop=4

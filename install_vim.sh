@@ -1,5 +1,57 @@
 #!/bin/bash
 
+set -e
+
+# Enable or disable colored logs
+COLOR_LOG=true
+
+## Color coded logging - https://misc.flogisoft.com/bash/tip_colors_and_formatting
+error() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[31m$1[0m"  # Red FG
+  else
+    echo "$1"
+  fi
+}
+
+warn() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[33m$1[0m"  # Yellow FG
+  else
+    echo "$1"
+  fi
+}
+
+info() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[32m$1[0m"  # Green FG
+  else
+    echo "$1"
+  fi
+}
+
+debug() {
+  if [ $COLOR_LOG = true ]; then
+    echo "[36m$1[0m"  # Cyan FG
+  else
+    echo "$1"
+  fi
+}
+
+# Check for dependencies
+declare -a dependencies=("asdf" "pip")
+deps_missing=0
+for i in "${dependencies[@]}"; do
+    if [ ! "$(command -v $i)" ]; then
+        error "Dependency '$i' is missing!"
+        deps_missing=1
+    fi
+done
+if [ $deps_missing ]; then
+	exit 127
+fi
+
+
 # For RedHat/CentOS
 if [ "$(command -v yum)" ]; then
 	yum install -y \
@@ -14,8 +66,6 @@ if [ "$(command -v yum)" ]; then
 		wget \
 		vim \
 		cmake \
-		python3-devel \
-		python3-pip \
 		libffi-devel \
 		libcurl-devel \
 		openssl-devel \
@@ -29,48 +79,29 @@ elif [ "$(command -v apt-get)" ]; then
 		vim \
 		build-essential \
 		cmake \
-		python3-dev \
-		python3-pip \
 		libffi-dev \
 		socat \
 		unzip \
 		x11-xserver-utils
 else
-	echo "No suitable package manager found. (yum, apt-get)"
+	error "No suitable package manager found. (yum, apt-get)"
 	exit 127
 fi
 
-LIBGIT_VERSION="0.28.4"
-wget "https://github.com/libgit2/libgit2/archive/v${LIBGIT_VERSION}.tar.gz"
-tar xzf "v${LIBGIT_VERSION}.tar.gz"
-cd "libgit2-${LIBGIT_VERSION}/"
-cmake .
-make
-sudo make install
-cd
-rm -rf "libgit2-${LIBGIT_VERSION}"
-rm "v${LIBGIT_VERSION}.tar.gz"
+# Install neovim
+asdf plugin-add neovim
+asdf install neovim latest
 
+# Install neovim dependencies
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-wget https://pypi.python.org/packages/3a/6c/52c4ba6050b80e266d87783ccd4d39b76a0d2459965abf1c7bde54dd9a72/python-hglib-2.4.tar.gz#md5=0ef137ffe3239f17484ddb3170b5860e
-tar xzf python-hglib-2.4.tar.gz
-cd python-hglib-2.4
-python3 setup.py install
-cd
-rm -rf python-hglib-2.4*
+pip install pynvim jedi
 
-# which python3 for ec2 instances where python 2 is the default
-$(which python3) -m pip install --upgrade pip
-$(which python3) -m pip install \
-	psutil \
-	pygit2 \
-	pyuv \
-	i3ipc \
-	powerline-status
-	
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
 wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $USER_HOME/.vimrc
+wget https://github.com/MichielVanderlee/system_config/raw/master/init.vim -O $USER_HOME/.config/nvim/init.vim
 wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip 
 unzip vim.zip -d $USER_HOME
 rm vim.zip
@@ -79,3 +110,5 @@ if [ -n "$SUDO_USER" ]; then
 	chown $SUDO_USER:$SUDO_USER $USER_HOME/.vimrc
 	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.vim
 fi
+
+info "Open nvim and run :PlugInstall"

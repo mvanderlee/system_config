@@ -16,12 +16,14 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
 
     antigen use oh-my-zsh
     # antigen bundle aws # doesn't work with pyenv
+    antigen bundle asdf
     antigen bundle git
     antigen bundle pip
     antigen bundle docker
     antigen bundle docker-compose
     antigen bundle jsontools
     antigen bundle kubectl
+    antigen bundle poetry
     antigen bundle tmux
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-completions
