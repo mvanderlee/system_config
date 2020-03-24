@@ -42,11 +42,11 @@ USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER
 
 # Install packages
 info "Updating packages"
-apt update
-apt upgrade -y
+sudo apt update
+sudo apt upgrade -y
 
 info "Installing packages"
-apt install -y \
+sudo apt install -y \
   automake \
   autoconf \
   bison \

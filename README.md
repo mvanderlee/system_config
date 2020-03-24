@@ -5,6 +5,10 @@ Holds my system configuration files
 ## Install
 
 ```shell
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install.sh | bash
+
+# OR
+
 wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | sudo bash
 wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | sudo bash
 wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | sudo bash
