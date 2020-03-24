@@ -40,16 +40,17 @@ else
 	exit 127
 fi
 
-
-wget https://github.com/libgit2/libgit2/archive/v0.27.0.tar.gz
-tar xzf v0.27.0.tar.gz
-cd libgit2-0.27.0/
+LIBGIT_VERSION="0.28.4"
+wget "https://github.com/libgit2/libgit2/archive/v${LIBGIT_VERSION}.tar.gz"
+tar xzf "v${LIBGIT_VERSION}.tar.gz"
+cd "libgit2-${LIBGIT_VERSION}/"
 cmake .
 make
 sudo make install
 cd
-rm -rf libgit2-0.27.0
-rm v0.27.0.tar.gz
+rm -rf "libgit2-${LIBGIT_VERSION}"
+rm "v${LIBGIT_VERSION}.tar.gz"
+
 
 wget https://pypi.python.org/packages/3a/6c/52c4ba6050b80e266d87783ccd4d39b76a0d2459965abf1c7bde54dd9a72/python-hglib-2.4.tar.gz#md5=0ef137ffe3239f17484ddb3170b5860e
 tar xzf python-hglib-2.4.tar.gz
