@@ -43,9 +43,6 @@ Plug 'zchee/deoplete-jedi'
 " Python autocomplete
 " Plug 'davidhalter/jedi-vim'
 
-" Python formatter
-Plug 'psf/black'
-
 " File tree
 Plug 'scrooloose/nerdTree'
 

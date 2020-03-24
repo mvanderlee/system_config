@@ -57,8 +57,8 @@ USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER
 
 # For RedHat/CentOS
 if [ "$(command -v yum)" ]; then
-	yum makecache fast
-	yum install -y \
+	sudo yum makecache fast
+	sudo yum install -y \
         bzip2 \
         bzip2-devel \
         htop \
@@ -74,7 +74,7 @@ if [ "$(command -v yum)" ]; then
 fi
 # Ubuntu (force-yes for bash on windows)
 if [ "$(command -v apt-get)" ]; then
-	apt-get install -y --force-yes \
+	sudo apt-get install -y --force-yes \
         htop \
         net-tools \
         openssl \
@@ -154,19 +154,19 @@ curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 >
 chmod +x /usr/local/bin/amm
 
 # docker
-apt-get install -y \
+sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg2 \
     software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-add-apt-repository \
+sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-apt-get update
-apt-get install -y docker-ce
+sudo apt-get update
+sudo apt-get install -y docker-ce
 
 curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose

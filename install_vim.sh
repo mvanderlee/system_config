@@ -54,15 +54,15 @@ fi
 
 # For RedHat/CentOS
 if [ "$(command -v yum)" ]; then
-	yum install -y \
+	sudo yum install -y \
 		epel-release \
 		yum-utils
 
-	yum makecache fast
+	sudo yum makecache fast
 	# yum groupinstall -y "Development Tools"
 	# https://access.redhat.com/discussions/1262603
-	yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
-	yum install -y \
+	sudo yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
+	sudo yum install -y \
 		wget \
 		vim \
 		cmake \
@@ -91,15 +91,20 @@ fi
 # Install neovim
 asdf plugin-add neovim
 asdf install neovim latest
+asdf global neovim "$(asdf latest neovim)"
 
 # Install neovim dependencies
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 pip install pynvim jedi
 
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
+mkdir -p $USER_HOME/.config/nvim
 wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $USER_HOME/.vimrc
 wget https://github.com/MichielVanderlee/system_config/raw/master/init.vim -O $USER_HOME/.config/nvim/init.vim
 wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip 

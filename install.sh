@@ -129,7 +129,11 @@ asdf_install ruby
 
 # Install vim 
 info "Installing Vim"
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | bash
 # Install tmux
 info "Installing Tmux"
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | bash
+
+# Install tools
+info "Installing tools"
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tools.sh | bash

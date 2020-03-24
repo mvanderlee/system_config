@@ -54,8 +54,8 @@ fi
 
 # For RedHat/CentOS
 if [ "$(command -v yum)" ]; then
-	yum makecache fast
-	yum install -y \
+	sudo yum makecache fast
+	sudo yum install -y \
 		wget \
 		git \
 		gcc \
@@ -66,7 +66,7 @@ if [ "$(command -v yum)" ]; then
 		xdg-utils
 # Ubuntu (force-yes for bash on windows)
 elif [ "$(command -v apt-get)" ]; then
-	apt-get install -y --force-yes \
+	sudo apt-get install -y --force-yes \
 		autoconf \
 		bison \
 		build-essential \
@@ -82,6 +82,7 @@ fi
 # Install tmux
 asdf plugin-add tmux
 asdf install tmux latest
+asdf global tmux "$(asdf latest tmux)"
 
 # Configure tmux
 USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
