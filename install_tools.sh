@@ -146,12 +146,10 @@ fi
 # colorls
 info "Installing colorls"
 gem install colorls
-rbenv rehash
-rehash
 
 # ammonite-repl
-curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 > /usr/local/bin/amm
-chmod +x /usr/local/bin/amm
+sudo curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 -o /usr/local/bin/amm
+sudo chmod +x /usr/local/bin/amm
 
 # docker
 sudo apt-get install -y \
@@ -168,10 +166,10 @@ sudo add-apt-repository \
 sudo apt-get update
 sudo apt-get install -y docker-ce
 
-curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-sysctl -w vm.max_map_count=262144
+sudo sysctl -w vm.max_map_count=262144
 
 # echo "Installing rust"
 # curl https://sh.rustup.rs -sSf | sh

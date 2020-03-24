@@ -122,10 +122,16 @@ info "Installing asdf plugins"
 asdf_install golang
 asdf_install java adopt-openjdk-8u242-b08
 asdf_install maven
-asdf_install nodejs 12
 asdf_install python 2.7
 asdf_install python 3.7
 asdf_install ruby
+
+# NodeJS requires installing of pgp keys.
+asdf plugin-add nodejs
+bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
+asdf install nodejs latest:12
+asdf global nodejs "$(asdf latest nodejs 12)"
+
 
 # Install vim 
 info "Installing Vim"
