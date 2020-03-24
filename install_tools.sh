@@ -40,14 +40,14 @@ debug() {
 
 # Check for dependencies
 declare -a dependencies=("asdf" "brew" "gem" "pip")
-deps_missing=0
+deps_missing=false
 for i in "${dependencies[@]}"; do
     if [ ! "$(command -v $i)" ]; then
         error "Dependency '$i' is missing!"
-        deps_missing=1
+        deps_missing=true
     fi
 done
-if [ $deps_missing ]; then
+if [ "$deps_missing" = true ]; then
 	exit 127
 fi
 

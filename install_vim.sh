@@ -40,14 +40,14 @@ debug() {
 
 # Check for dependencies
 declare -a dependencies=("asdf" "pip")
-deps_missing=0
+deps_missing=false
 for i in "${dependencies[@]}"; do
     if [ ! "$(command -v $i)" ]; then
         error "Dependency '$i' is missing!"
-        deps_missing=1
+        deps_missing=true
     fi
 done
-if [ $deps_missing ]; then
+if [ "$deps_missing" = true ]; then
 	exit 127
 fi
 
@@ -74,7 +74,7 @@ if [ "$(command -v yum)" ]; then
 		unzip
 # Ubuntu (force-yes for bash on windows)
 elif [ "$(command -v apt-get)" ]; then
-	apt-get install -y --force-yes \
+	sudo apt-get install -y --force-yes \
 		wget \
 		vim \
 		build-essential \

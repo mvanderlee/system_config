@@ -86,6 +86,7 @@ wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/inst
 info "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.zprofile
+echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.profile
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 brew install gcc
 brew install jq
@@ -94,10 +95,13 @@ brew install openssl readline sqlite3 xz zlib
 # Install adsf
 info "Installing asdf"
 brew install asdf
+echo -e "\n. $(brew --prefix asdf)/asdf.sh" >> ~/.bashrc
+echo -e "\n. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash" >> ~/.bashrc
 
 # Install plugins
 asdf_install() {
   info "  - Installing $1"
+  asdf plugin-add "$1"
 
   # Get latest version so we can install and set it as global
   if [ "$2" ]; then
@@ -110,7 +114,6 @@ asdf_install() {
     latest="$2"
   fi
 
-  asdf plugin-add "$1"
   asdf install "$1" "$latest"
   asdf global "$1" "$latest"
 }
