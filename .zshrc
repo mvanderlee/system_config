@@ -87,14 +87,6 @@ function chpwd() {
     fi
 }
 
-if [ -f ~/.export ]; then
-	source ~/.export
-fi
-
-if [ -f ~/.alias ]; then
-	source ~/.alias
-fi
-
 if [ -d $HOME/.nvm ]; then
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -129,6 +121,14 @@ if [ -d $HOME/.rbenv ]; then
     if command -v goenv 1>/dev/null 2>&1; then
         eval "$(rbenv init -)"
     fi
+fi
+
+if [ -f ~/.export ]; then
+	source ~/.export
+fi
+
+if [ -f ~/.alias ]; then
+	source ~/.alias
 fi
 
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
