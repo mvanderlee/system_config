@@ -28,8 +28,31 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
 
 POWERLEVEL9K_TIME_FORMAT="%D{%H:%M}"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time pyenv node_version time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time asdf_python node_version time)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
 # POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='\uf0da'
 POWERLEVEL9K_SHOW_CHANGESET=true
+
+get_asdf_version() {
+  # Get asdf plugin version
+  if [ $commands[asdf] ]; then
+    local asdf_global_conf="$HOME/.tool-versions"
+    local version_regex="s/^\([.0-9]*\)\s*\([.0-9]*\)\{0,1\}.*/\1 \2/p"
+    local config_regex="s/.*(set by \(.*\))/\1/p"
+
+    local current="$(asdf current $1)"
+    local current_version="$(echo $current | sed -n $version_regex)"
+    local current_conf="$(echo $current | sed -n $config_regex)"
+
+    echo "$current_version"
+  fi
+}
+
+prompt_asdf_python() {
+  if [ $commands[asdf] ]; then
+    local python_version="$(get_asdf_version python)"
+
+    "$1_prompt_segment" "$0" "$2" "blue" "$DEFAULT_COLOR" "$python_version" 'PYTHON_ICON'
+  fi
+}
