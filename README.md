@@ -9,10 +9,10 @@ wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/inst
 
 # OR
 
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | sudo bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | sudo bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | sudo bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tools.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tools.sh | bash
 ```
 
 ## Screenshots
@@ -43,10 +43,8 @@ I use these to store my exports and aliasses instead of adding them to `~/.zshrc
 
 ### Virtual Environments
 
-* [goenv](https://github.com/syndbg/goenv)
-* [nvm](https://github.com/nvm-sh/nvm)
-* [pyenv](https://github.com/pyenv/pyenv)
-* [rbenv](https://github.com/rbenv/rbenv)
+* [asdf](https://asdf-vm.com/)
+* [pyenv](https://github.com/pyenv/pyenv) - Because asdf doesn't handle virtualenvs yet.
 
 ### Tools and customization
 
@@ -57,6 +55,6 @@ I use these to store my exports and aliasses instead of adding them to `~/.zshrc
 * [nerdfonts](https://www.nerdfonts.com) - Fira Code
 * [pgcli](https://github.com/dbcli/pgcli)
 * [Powerlevel9k](https://github.com/Powerlevel9k/powerlevel9k)
-* [psql-pager](https://github.com/kyokley/psql-pager)
+* [pspg](https://github.com/okbob/pspg)
 * [ptpython](https://github.com/prompt-toolkit/ptpython)
 * [tpm](https://github.com/tmux-plugins/tpm)

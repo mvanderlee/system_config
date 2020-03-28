@@ -38,7 +38,6 @@ debug() {
   fi
 }
 
-USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
 
 # Install packages
 info "Updating packages"
@@ -85,8 +84,8 @@ wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/inst
 # Install Homebrew
 info "Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.zprofile
-echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $USER_HOME/.profile
+echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $HOME/.zprofile
+echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >> $HOME/.profile
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 brew install gcc
 brew install jq
@@ -122,8 +121,6 @@ info "Installing asdf plugins"
 asdf_install golang
 asdf_install java adopt-openjdk-8u242-b08
 asdf_install maven
-asdf_install python 2.7
-asdf_install python 3.7
 asdf_install ruby
 
 # NodeJS requires installing of pgp keys.
@@ -132,6 +129,9 @@ bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
 asdf install nodejs latest:12
 asdf global nodejs "$(asdf latest nodejs 12)"
 
+# PyEnv - because asdf does not support virtual environment, yet! - https://github.com/asdf-vm/asdf/issues/636
+git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
 
 # Install vim 
 info "Installing Vim"

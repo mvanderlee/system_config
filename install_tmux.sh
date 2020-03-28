@@ -85,14 +85,7 @@ asdf install tmux latest
 asdf global tmux "$(asdf latest tmux)"
 
 # Configure tmux
-USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
-
-git clone https://github.com/tmux-plugins/tpm $USER_HOME/.tmux/plugins/tpm
-wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $USER_HOME/.tmux.conf
-
-if [ -n "$SUDO_USER" ]; then 
-	chown $SUDO_USER:$SUDO_USER $USER_HOME/.tmux.conf
-	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.tmux
-fi
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $HOME/.tmux.conf
 
 info "Open TMUX and press 'ctrl+a shift+i'. Ensure you're not nested in screen!'"

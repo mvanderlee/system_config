@@ -51,8 +51,6 @@ if [ "$deps_missing" = true ]; then
 	exit 127
 fi
 
-USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
-
 # extra packages
 
 # For RedHat/CentOS
@@ -93,13 +91,13 @@ fi
 # Set theme
 info "Setting Theme"
 CURRENT_PIC=$(gsettings get org.gnome.desktop.screensaver picture-uri)
-if [ "$CURRENT_FONT" != "'file://$USER_HOME/Pictures/RS_Siege1.jpg'" ]; then
-    wget -qO "$USER_HOME/Pictures/RS_Siege1.jpg" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
+if [ "$CURRENT_FONT" != "'file://$HOME/Pictures/RS_Siege1.jpg'" ]; then
+    wget -qO "$HOME/Pictures/RS_Siege1.jpg" https://github.com/MichielVanderlee/system_config/raw/master/assets/wallpapers/RS_Siege1.jpg
 
     gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
     gsettings set org.gnome.desktop.interface icon-theme "Humanity-Dark"
-    gsettings set org.gnome.desktop.background picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
-    gsettings set org.gnome.desktop.screensaver picture-uri "file://$USER_HOME/Pictures/RS_Siege1.jpg"
+    gsettings set org.gnome.desktop.background picture-uri "file://$HOME/Pictures/RS_Siege1.jpg"
+    gsettings set org.gnome.desktop.screensaver picture-uri "file://$HOME/Pictures/RS_Siege1.jpg"
 fi
 
 # Install fonts
@@ -107,8 +105,8 @@ CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
 if [ "$CURRENT_FONT" != "'FuraCode Nerd Font 11'" ]; then
 	info "Install Fonts"
 	wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
-	mkdir -p $USER_HOME/.fonts/truetype/FuraCode
-	unzip FiraCode.zip -d $USER_HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
+	mkdir -p $HOME/.fonts/truetype/FuraCode
+	unzip FiraCode.zip -d $HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
 
 	# wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip
 	# mkdir -p $HOME/.fonts/opentype/FuraMono
@@ -133,14 +131,11 @@ info "Installing pspg"
 brew install pspg
 
 # ptpython
-if [[ ! -d "$USER_HOME/.ptpython" ]]; then
+if [[ ! -d "$HOME/.ptpython" ]]; then
     info "Installing ptpython"
     pip install ptpython
-    mkdir $USER_HOME/.ptpython
-    wget -O $USER_HOME/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
-    if [ -n "$SUDO_USER" ]; then 
-        chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.ptpython
-    fi
+    mkdir $HOME/.ptpython
+    wget -O $HOME/.ptpython/config.py https://github.com/MichielVanderlee/system_config/raw/master/.ptpython-config.py
 fi
 
 # colorls

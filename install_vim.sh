@@ -102,18 +102,11 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 pip install pynvim jedi
 
-USER_HOME=$(if [ -e $SUDO_USER ]; then echo $HOME; else getent passwd $SUDO_USER | cut -d: -f6; fi)
-
-mkdir -p $USER_HOME/.config/nvim
-wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $USER_HOME/.vimrc
-wget https://github.com/MichielVanderlee/system_config/raw/master/init.vim -O $USER_HOME/.config/nvim/init.vim
+mkdir -p $HOME/.config/nvim
+wget https://github.com/MichielVanderlee/system_config/raw/master/.vimrc -O $HOME/.vimrc
+wget https://github.com/MichielVanderlee/system_config/raw/master/init.vim -O $HOME/.config/nvim/init.vim
 wget https://github.com/MichielVanderlee/system_config/raw/master/vim.zip 
-unzip vim.zip -d $USER_HOME
+unzip vim.zip -d $HOME
 rm vim.zip
-
-if [ -n "$SUDO_USER" ]; then 
-	chown $SUDO_USER:$SUDO_USER $USER_HOME/.vimrc
-	chown -R $SUDO_USER:$SUDO_USER $USER_HOME/.vim
-fi
 
 info "Open nvim and run :PlugInstall"
