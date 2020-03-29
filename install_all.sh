@@ -460,6 +460,11 @@ show_manual_next_steps() {
 }
 
 main() {
+  # default to ALL
+  if [[ $INSTALL_ALL = false && $INSTALL_TMUX = false && $INSTALL_TOOLS = false && $INSTALL_VIM = false && $INSTALL_ZSH = false ]]; then
+    INSTALL_ALL=true
+  fi
+
   if [ ! $CONFIGURE_ONLY = true ]; then
     install
   fi
