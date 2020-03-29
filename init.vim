@@ -31,19 +31,25 @@ hi Comment guifg=#7C7C7C     guibg=NONE        gui=NONE      ctermfg=darkgray   
 " """"""""""""""""""
 " PLUGIN MANAGEMENT!
 " """"""""""""""""""
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'vim-airline/vim-airline'
 
 " Autocomplete
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 Plug 'zchee/deoplete-jedi'
 
 " Python autocomplete
 " Plug 'davidhalter/jedi-vim'
 
 " Python formatter
-Plug 'psf/black'
+"Plug 'psf/black'
 
 " File tree
 Plug 'scrooloose/nerdTree'

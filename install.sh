@@ -79,7 +79,7 @@ sudo apt install -y \
 
 # Install zsh
 info "Installing ZSH"
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | sudo bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | bash
 
 # Install Homebrew
 info "Installing Homebrew"
@@ -123,6 +123,7 @@ asdf_install java adopt-openjdk-8u242-b08
 asdf_install maven
 asdf_install ruby
 
+info "Installing nodejs"
 # NodeJS requires installing of pgp keys.
 asdf plugin-add nodejs
 bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
@@ -130,8 +131,16 @@ asdf install nodejs latest:12
 asdf global nodejs "$(asdf latest nodejs 12)"
 
 # PyEnv - because asdf does not support virtual environment, yet! - https://github.com/asdf-vm/asdf/issues/636
-git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-git clone https://github.com/pyenv/pyenv-virtualenv.git $HOME/.pyenv/plugins/pyenv-virtualenv
+export PYENV_ROOT="$HOME/.pyenv"
+git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
+git clone https://github.com/momo-lab/pyenv-install-latest.git $PYENV_ROOT/plugins/pyenv-install-latest
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"  
+eval "$(pyenv virtualenv-init -)"
+pyenv install-latest 2.7
+pyenv install-latest 3.7
+pyenv global "$(pyenv install-latest --print 3.7)" "$(pyenv install-latest --print 2.7)"
 
 # Install vim 
 info "Installing Vim"

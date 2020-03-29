@@ -93,6 +93,8 @@ asdf plugin-add neovim
 asdf install neovim latest
 asdf global neovim "$(asdf latest neovim)"
 
+/usr/bin/python3 -m pip install --user pynvim
+
 # Install neovim dependencies
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

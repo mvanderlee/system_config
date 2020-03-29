@@ -28,7 +28,7 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
 
 POWERLEVEL9K_TIME_FORMAT="%D{%H:%M}"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time asdf_python node_version time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time pyenv node_version time)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
 # POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='\uf0da'

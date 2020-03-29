@@ -4,12 +4,15 @@ export TERM="xterm-256color"
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# source file if it exists
+include () {
+    [[ -f "$1" ]] && source "$1"
+}
+
 # Antigen
 export _ANTIGEN_INSTALL_DIR=~/.antigen
 
-if [ -f ~/.powerlevel9k ]; then
-    source ~/.powerlevel9k
-fi
+include "~/.powerlevel9k"
 
 if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     source $_ANTIGEN_INSTALL_DIR/antigen.zsh
@@ -78,23 +81,6 @@ function zsh_ignore_git() {
 	git config --add oh-my-zsh.hide-dirty 1
 }
 
-# cd hook
-function chpwd() {
-    if [ -d $HOME/.goenv ]; then
-        if [ -f $PWD/.go-path ]; then
-            export GOPATH="$PWD"
-        else
-            export GOPATH="$(realpath -m ~/go/$(goenv version | head -n1 | awk '{print $1;}'))"
-        fi
-    fi
-}
-
-if [ -d $HOME/.nvm ]; then
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-
 if [ -d $HOME/.pyenv ]; then
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
@@ -108,31 +94,9 @@ if [ -d $HOME/.pyenv ]; then
     fi
 fi
 
-if [ -d $HOME/.goenv ]; then
-    export GOENV_ROOT="$HOME/.goenv"
-    export PATH="$GOENV_ROOT/bin:$PATH"
-    if command -v goenv 1>/dev/null 2>&1; then
-        eval "$(goenv init -)"
-        export PATH="$GOROOT/bin:$PATH"
-        export PATH="$GOPATH/bin:$PATH"
-    fi
-fi
-
-if [ -d $HOME/.rbenv ]; then
-    export PATH="$HOME/.rbenv/bin:$PATH"
-    if command -v goenv 1>/dev/null 2>&1; then
-        eval "$(rbenv init -)"
-    fi
-fi
-
-if [ -f ~/.export ]; then
-	source ~/.export
-fi
-
-if [ -f ~/.alias ]; then
-	source ~/.alias
-fi
+# Do these last in case they include things used above, e.g.: $PYENV_ROOT
+include "~/.export"
+include "~/.alias"
 
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
-
 [[ -x "$(command -v aws_zsh_completer.sh)" ]] && source "$(pyenv which aws_zsh_completer.sh)"
