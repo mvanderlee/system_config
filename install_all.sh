@@ -449,11 +449,13 @@ configure() {
 }
 
 show_manual_next_steps() {
+  info "Open a new terminal for all changes to take effect."
+
   if [[ $INSTALL_ALL = true || $INSTALL_TMUX = true ]]; then
-    info "Open TMUX and press 'ctrl+a shift+i'. Ensure you're not nested in screen!'"
+    info " - Then open TMUX and press 'ctrl+a shift+i'. Ensure you're not nested in screen!'"
   fi
   if [[ $INSTALL_ALL = true || $INSTALL_VIM = true ]]; then
-    info "Open nvim and run :PlugInstall"
+    info " - Then open vim, and nvim and run :PlugInstall"
   fi
 }
 
