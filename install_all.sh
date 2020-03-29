@@ -440,6 +440,7 @@ configure() {
       configure_gnome_theme
     fi
   fi
+  if [[ $INSTALL_ALL = true || $INSTALL_VIM = true ]]; then
     configure_vim
   fi
   if [[ $INSTALL_ALL = true || $INSTALL_ZSH = true ]]; then
