@@ -9,10 +9,10 @@ wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/inst
 
 # OR
 
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_zsh.sh | bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tmux.sh | bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_vim.sh | bash
-wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install_tools.sh | bash
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install.sh | bash /dev/stdin --vim
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install.sh | bash /dev/stdin --tmux
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install.sh | bash /dev/stdin --tools
+wget -qO- https://raw.githubusercontent.com/mvanderlee/system_config/master/install.sh | bash /dev/stdin --zsh
 ```
 
 ## Screenshots
@@ -41,8 +41,9 @@ I use these to store my exports and aliasses instead of adding them to `~/.zshrc
 
 ## Links
 
-### Virtual Environments
+### Installers
 
+* [brew](https://brew.sh/)
 * [asdf](https://asdf-vm.com/)
 * [pyenv](https://github.com/pyenv/pyenv) - Because asdf doesn't handle virtualenvs yet.
 
