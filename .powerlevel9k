@@ -28,7 +28,7 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='black'
 
 POWERLEVEL9K_TIME_FORMAT="%D{%H:%M}"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time pyenv node_version time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time pyenv my_node_version time)
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 # POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
 # POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='\uf0da'
@@ -54,5 +54,15 @@ prompt_asdf_python() {
     local python_version="$(get_asdf_version python)"
 
     "$1_prompt_segment" "$0" "$2" "blue" "$DEFAULT_COLOR" "$python_version" 'PYTHON_ICON'
+  fi
+}
+
+# Only show node version if package.json exists in the current directory
+prompt_my_node_version() {
+  if [[ -f package.json ]]; then
+    local node_version=$(node -v 2>/dev/null)
+    [[ -z "${node_version}" ]] && return
+
+    "$1_prompt_segment" "$0" "$2" "green" "white" "${node_version:1}" 'NODE_ICON'
   fi
 }
