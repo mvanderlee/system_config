@@ -51,10 +51,10 @@ base_packages=(
   libxslt-dev
   linux-headers-generic
   llvm
+  ssh
   tk-dev
   unixodbc-dev
   unzip
-  wget
   xdg-utils
   xz-utils
   zlibc
@@ -73,7 +73,7 @@ brew_base_packages=(
   jq
   libpq
   net-tools
-  openssh
+  # openssh - https://github.com/Homebrew/linuxbrew-core/pull/19684
   openssl 
   readline 
   sqlite3 
