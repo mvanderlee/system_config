@@ -35,6 +35,7 @@ hi Comment guifg=#7C7C7C     guibg=NONE        gui=NONE      ctermfg=darkgray   
 call plug#begin('~/.vim/plugged')
 
 Plug 'vim-airline/vim-airline'
+Plug 'ryanoasis/vim-devicons'
 
 " Autocomplete
 if has('nvim')
