@@ -1,6 +1,6 @@
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-export TERM="xterm-256color"
+export TERM="screen-256color"
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -12,7 +12,7 @@ include () {
 # Antigen
 export _ANTIGEN_INSTALL_DIR=~/.antigen
 
-include "~/.powerlevel9k"
+include ~/.powerlevel9k
 
 if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     source $_ANTIGEN_INSTALL_DIR/antigen.zsh
@@ -95,8 +95,8 @@ if [ -d $HOME/.pyenv ]; then
 fi
 
 # Do these last in case they include things used above, e.g.: $PYENV_ROOT
-include "~/.export"
-include "~/.alias"
+include ~/.export
+include ~/.alias
 
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
 [[ -x "$(command -v aws_zsh_completer.sh)" ]] && source "$(pyenv which aws_zsh_completer.sh)"

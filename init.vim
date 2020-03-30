@@ -149,3 +149,5 @@ au BufRead,BufNewFile *.yml,*.yaml set expandtab
 
 " enable line numbers
 set nu
+
+set background=dark
