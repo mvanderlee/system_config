@@ -3,6 +3,7 @@ DISABLE_AUTO_TITLE="true"
 export TERM="screen-256color"
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+fpath+=~/.zfunc
 
 # source file if it exists
 include () {

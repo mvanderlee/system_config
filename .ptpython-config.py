@@ -23,10 +23,10 @@ def configure(repl):
     :param repl: `PythonRepl` instance.
     """
     # Show function signature (bool).
-    repl.show_signature = True
+    repl.show_signature = False
 
     # Show docstring (bool).
-    repl.show_docstring = False
+    repl.show_docstring = True
 
     # Show the "[Meta+Enter] Execute" message when pressing [Enter] only
     # inserts a newline instead of executing the code.
@@ -55,7 +55,7 @@ def configure(repl):
     repl.wrap_lines = True
 
     # Mouse support.
-    repl.enable_mouse_support = True
+    repl.enable_mouse_support = False
 
     # Complete while typing. (Don't require tab before the
     # completion menu is shown.)
@@ -101,14 +101,14 @@ def configure(repl):
     repl.enable_input_validation = True
 
     # Use this colorscheme for the code.
-    repl.use_code_colorscheme('default')
+    repl.use_code_colorscheme('monokai')
 
     # Set color depth (keep in mind that not all terminals support true color).
 
-    #repl.color_depth = 'DEPTH_1_BIT'  # Monochrome.
-    #repl.color_depth = 'DEPTH_4_BIT'  # ANSI colors only.
+    # repl.color_depth = 'DEPTH_1_BIT'  # Monochrome.
+    # repl.color_depth = 'DEPTH_4_BIT'  # ANSI colors only.
     repl.color_depth = 'DEPTH_8_BIT'  # The default, 256 colors.
-    #repl.color_depth = 'DEPTH_24_BIT'  # True color.
+    # repl.color_depth = 'DEPTH_24_BIT'  # True color.
 
     # Syntax.
     repl.enable_syntax_highlighting = True
@@ -136,7 +136,6 @@ def configure(repl):
         if b.accept_action.is_returnable:
             b.accept_action.validate_and_handle(event.cli, b)
     """
-
 
     # Typing 'jj' in Vi Insert mode, should send escape. (Go back to navigation
     # mode.)

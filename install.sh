@@ -37,6 +37,8 @@ base_packages=(
   libbz2-dev
   libffi-dev
   liblzma-dev
+  libncurses5
+  libncursesw5
   libncurses5-dev
   libncursesw5-dev
   libpq-dev
@@ -51,6 +53,7 @@ base_packages=(
   libxslt-dev
   linux-headers-generic
   llvm
+  python-openssl
   ssh
   tk-dev
   unixodbc-dev
