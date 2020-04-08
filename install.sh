@@ -330,6 +330,12 @@ install_tools() {
 install_pyenv() {
   info "Installing PyEnv"
   # PyEnv - because asdf does not support virtual environment, yet! - https://github.com/asdf-vm/asdf/issues/636
+
+  # https://github.com/pyenv/pyenv/issues/1479#issuecomment-610683526
+  debug "Removing linuxbrew from path"
+  OLD_PATH="$PATH"
+  export PATH="$(echo $PATH | tr : '\n' | grep -v linuxbrew | paste -s -d:)"
+
   export PYENV_ROOT="$HOME/.pyenv"
   git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
   git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
@@ -341,6 +347,9 @@ install_pyenv() {
   pyenv install-latest 2.7
   pyenv install-latest 3.7
   pyenv global "$(pyenv install-latest --print 3.7)" "$(pyenv install-latest --print 2.7)"
+
+  debug "Resetting path"
+  export PATH=$OLD_PATH
 }
 
 install_docker() {
