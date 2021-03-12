@@ -44,7 +44,7 @@ base_packages=(
   libpq-dev
   libsqlite3-dev
   libssl-dev
-  libreadline7
+  libreadline8
   libreadline-dev
   libtool
   libyaml-dev
