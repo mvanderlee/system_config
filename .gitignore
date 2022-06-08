@@ -4,6 +4,7 @@
 !.vimrc
 !.tmux.conf
 !.powerlevel9k
+!.p10k.zsh
 !.alias
 !.ptpython-config.py
 !terminal.profile

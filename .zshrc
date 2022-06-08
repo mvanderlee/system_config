@@ -36,8 +36,7 @@ if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     # Syntax highlighting bundle
     antigen bundle zsh-users/zsh-syntax-highlighting
 
-    #antigen theme DDuTCH/bullet-train.zsh bullet-train
-    antigen theme bhilburn/powerlevel9k powerlevel9k
+    antigen theme romkatv/powerlevel10k
 
     antigen apply
 fi
@@ -101,3 +100,6 @@ include ~/.alias
 
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
 [[ -x "$(command -v aws_zsh_completer.sh)" ]] && source "$(pyenv which aws_zsh_completer.sh)"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
