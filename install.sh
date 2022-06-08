@@ -219,6 +219,7 @@ configure_zsh() {
   curl -L git.io/antigen > $HOME/.antigen/antigen.zsh
 
   wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $HOME/.zshrc
+  wget https://github.com/MichielVanderlee/system_config/raw/master/.p10k.zsh -O $HOME/.p10k.zsh
   wget https://github.com/MichielVanderlee/system_config/raw/master/.powerlevel9k -O $HOME/.powerlevel9k
 
   info "Updating shell"
