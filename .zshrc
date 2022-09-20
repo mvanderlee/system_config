@@ -18,7 +18,7 @@ include ~/.powerlevel9k
 if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
     source $_ANTIGEN_INSTALL_DIR/antigen.zsh
 
-    antigen use oh-my-zsh
+    antigen use ohmyzsh/oh-my-zsh
     # antigen bundle aws # doesn't work with pyenv
     antigen bundle asdf
     antigen bundle git
