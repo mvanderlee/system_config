@@ -29,6 +29,7 @@ INSTALL_ZSH=false
 base_packages=(
   automake
   autoconf
+  apt-transport-https
   bison
   build-essential
   curl
@@ -53,14 +54,14 @@ base_packages=(
   libxslt-dev
   linux-headers-generic
   llvm
-  python-openssl
+  python3-openssl
+  software-properties-common
   ssh
   tk-dev
   unixodbc-dev
   unzip
   xdg-utils
   xz-utils
-  zlibc
   zlib1g
   zlib1g-dev
 )
@@ -127,7 +128,13 @@ asdf_install() {
   # If version is not defined, will install the latest version
 
   info "  - Installing $1"
+  set +e  # ignore error
   asdf plugin-add "$1"
+  status_code=$?
+  if [ $status_code -eq 0 ] || [ $status_code -eq 2 ]; then
+      echo "$1 is already added"
+  fi
+  set -e  # exit on errors
 
   # Get latest version so we can install and set it as global
   if [ "$2" ]; then
@@ -190,20 +197,20 @@ install_homebrew() {
 
 install_adsf() {
   install_homebrew
-  if [ ! -f "$(brew --prefix asdf)/asdf.sh" ]; then
+  if [ ! -f "$(brew --prefix asdf)/libexec/asdf.sh" ]; then
     info "Installing asdf"
 
     brew install asdf
-    echo -e "\n. $(brew --prefix asdf)/asdf.sh" >> ~/.bashrc
+    echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ~/.bashrc
     echo -e "\n. $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash" >> ~/.bashrc
     info "Installed asdf"
   else
     debug "asdf is already installed, skipping..."
   fi
-
+  
   if [ ! "$(command -v asdf)" ]; then
     info "Sourcing asdf"
-    . $(brew --prefix asdf)/asdf.sh
+    . $(brew --prefix asdf)/libexec/asdf.sh
   fi
 }
 
@@ -264,9 +271,7 @@ install_tmux() {
   info "Installing Tmux"
   install_adsf
 
-  asdf plugin-add tmux
-  asdf install tmux latest
-  asdf global tmux "$(asdf latest tmux)"
+  asdf_install tmux
 
   info "Installed Tmux"
 }
@@ -275,29 +280,33 @@ configure_tmux() {
   info "Configuring Tmux"
 
   # Configure tmux
-  git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-  wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $HOME/.tmux.conf
-
-  info "Configured Tmux"
+  if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+    wget https://github.com/MichielVanderlee/system_config/raw/master/.tmux.conf -O $HOME/.tmux.conf
+    info "Configured Tmux"
+  else
+    info "TMUX already configured, skipping..."
+  fi
 }
 
 install_tools() {
   info "Installing Tools"
+  install_vscode
   install_adsf
   install_pyenv
 
   # Install plugins
   asdf_install golang
-  asdf_install java adopt-openjdk-8u242-b08
+  asdf_install java openjdk
   asdf_install maven
   asdf_install ruby
 
   info "Installing nodejs"
-  # NodeJS requires installing of pgp keys.
-  asdf plugin-add nodejs
-  bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring
-  asdf install nodejs latest:12
-  asdf global nodejs "$(asdf latest nodejs 12)"
+  ## Install NVM because that's what I use on windows, so don't mix commands to switch node versions
+  # asdf plugin-add nodejs
+  # asdf install nodejs latest:12
+  # asdf global nodejs "$(asdf latest nodejs 12)"
+  wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 
   pip install \
     awscli \
@@ -332,25 +341,32 @@ install_pyenv() {
   info "Installing PyEnv"
   # PyEnv - because asdf does not support virtual environment, yet! - https://github.com/asdf-vm/asdf/issues/636
 
-  # https://github.com/pyenv/pyenv/issues/1479#issuecomment-610683526
-  debug "Removing linuxbrew from path"
-  OLD_PATH="$PATH"
-  export PATH="$(echo $PATH | tr : '\n' | grep -v linuxbrew | paste -s -d:)"
-
   export PYENV_ROOT="$HOME/.pyenv"
-  git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
-  git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
-  git clone https://github.com/momo-lab/pyenv-install-latest.git $PYENV_ROOT/plugins/pyenv-install-latest
-  git clone https://github.com/jawshooah/pyenv-default-packages.git $PYENV_ROOT/plugins/pyenv-default-packages
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"  
-  eval "$(pyenv virtualenv-init -)"
-  pyenv install-latest 2.7
-  pyenv install-latest 3.7
-  pyenv global "$(pyenv install-latest --print 3.7)" "$(pyenv install-latest --print 2.7)"
+  if [[ ! -d "$PYENV_ROOT" ]]; then
+    # https://github.com/pyenv/pyenv/issues/1479#issuecomment-610683526
+    debug "Removing linuxbrew from path"
+    OLD_PATH="$PATH"
+    export PATH="$(echo $PATH | tr : '\n' | grep -v linuxbrew | paste -s -d:)"
 
-  debug "Resetting path"
-  export PATH=$OLD_PATH
+    git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+    git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
+    git clone https://github.com/momo-lab/pyenv-install-latest.git $PYENV_ROOT/plugins/pyenv-install-latest
+    git clone https://github.com/jawshooah/pyenv-default-packages.git $PYENV_ROOT/plugins/pyenv-default-packages
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"  
+    eval "$(pyenv virtualenv-init -)"
+    pyenv install-latest 3.11
+    pyenv global "$(pyenv install-latest --print 3.11)"
+
+    debug "Resetting path"
+    export PATH=$OLD_PATH
+  else
+    # Ensure we initialize pyenv so we can continue in case of reruns
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"  
+    eval "$(pyenv virtualenv-init -)"
+    info "Already installed PyEnv, skipping..."
+  fi
 }
 
 install_docker() {
@@ -365,20 +381,31 @@ install_docker() {
     gnupg2 \
     software-properties-common
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository \
+  sudo add-apt-repository -y \
     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) \
     stable"
   sudo apt-get update
   sudo apt-get install -y docker-ce
 
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
 
-  sudo groupadd docker
   sudo usermod -aG docker $USER
 
   info "Installed Docker"
+}
+
+install_vscode() {
+  info "Installing VSCode"
+
+  sudo apt install software-properties-common apt-transport-https wget -y
+  wget -O- https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor | sudo tee /usr/share/keyrings/vscode.gpg
+  echo deb [arch=amd64 signed-by=/usr/share/keyrings/vscode.gpg] https://packages.microsoft.com/repos/vscode stable main | sudo tee /etc/apt/sources.list.d/vscode.list
+  sudo apt update
+  sudo apt install code
+
+  info "Installed VSCode"
 }
 
 configure_gnome_theme(){
@@ -395,20 +422,20 @@ configure_gnome_theme(){
 
   # Install fonts
   CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
-  if [ "$CURRENT_FONT" != "'FuraCode Nerd Font 11'" ]; then
+  if [ "$CURRENT_FONT" != "'FiraCode Nerd Font 11'" ]; then
     info "Install Fonts"
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip
-    mkdir -p $HOME/.fonts/truetype/FuraCode
-    unzip FiraCode.zip -d $HOME/.fonts/truetype/FuraCode -x '*.otf' '*Windows Compatible.ttf'
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/FiraCode.zip
+    mkdir -p $HOME/.fonts/truetype/FiraCode
+    unzip FiraCode.zip -d $HOME/.fonts/truetype/FiraCode
 
     sudo fc-cache -f -v
-    gsettings set org.gnome.desktop.interface monospace-font-name "FuraCode Nerd Font 11"
+    gsettings set org.gnome.desktop.interface monospace-font-name "FiraCode Nerd Font 11"
   fi
 
   # Set Terminal Theme
   info "Setting Terminal Theme"
   wget -qO terminal.profile https://github.com/MichielVanderlee/system_config/raw/master/terminal.profile
-  cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/ -
+  cat terminal.profile | dconf load /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/
 
   info "Configured Theme"
 }
