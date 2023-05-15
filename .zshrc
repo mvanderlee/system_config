@@ -94,10 +94,12 @@ if [ -d $HOME/.pyenv ]; then
     fi
 fi
 
+
 # Do these last in case they include things used above, e.g.: $PYENV_ROOT
 include ~/.export
 include ~/.alias
 
+[[ -x "$(command -v brew)" ]] && source $(brew --prefix asdf)/libexec/asdf.sh
 [[ -x "$(command -v kubectl)" ]] && source <(kubectl completion zsh)
 [[ -x "$(command -v aws_zsh_completer.sh)" ]] && source "$(pyenv which aws_zsh_completer.sh)"
 

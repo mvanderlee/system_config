@@ -35,6 +35,7 @@ base_packages=(
   curl
   file
   git
+  htop
   libbz2-dev
   libffi-dev
   liblzma-dev
@@ -388,7 +389,7 @@ install_docker() {
   sudo apt-get update
   sudo apt-get install -y docker-ce
 
-  sudo curl -L "https://github.com/docker/compose/releases/download/2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
 
   sudo usermod -aG docker $USER
