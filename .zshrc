@@ -1,6 +1,12 @@
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-export TERM="screen-256color"
+# https://github.com/neovim/neovim/issues/6134#issuecomment-1086666499
+if [ -n "$TMUX" ]; then
+    export TERM="screen-256color"
+else
+    export TERM="xterm-256color"
+fi
+
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 fpath+=~/.zfunc
