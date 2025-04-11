@@ -39,9 +39,9 @@ Plug 'ryanoasis/vim-devicons'
 
 " Autocomplete
 if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'Shougo/deoplete.nvim/2258b116e81ab308495f94c81077682c39c32280', { 'do': ':UpdateRemotePlugins' }
 else
-  Plug 'Shougo/deoplete.nvim'
+  Plug 'Shougo/deoplete.nvim/2258b116e81ab308495f94c81077682c39c32280'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif

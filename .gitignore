@@ -7,6 +7,7 @@
 !.p10k.zsh
 !.alias
 !.ptpython-config.py
+!.zsh_plugins.txt
 !terminal.profile
 !install*.sh
 !init.vim

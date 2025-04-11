@@ -39,10 +39,7 @@ base_packages=(
   libbz2-dev
   libffi-dev
   liblzma-dev
-  libncurses5
-  libncursesw5
-  libncurses5-dev
-  libncursesw5-dev
+  libncurses-dev
   libpq-dev
   libsqlite3-dev
   libssl-dev
@@ -52,12 +49,14 @@ base_packages=(
   libyaml-dev
   libxml2-dev
   libxmlsec1-dev
-  libxslt-dev
+  libxslt1-dev
   linux-headers-generic
   llvm
+  ncurses-term
   python3-openssl
   software-properties-common
   ssh
+  ssh-import-id
   tk-dev
   unixodbc-dev
   unzip
@@ -222,9 +221,7 @@ install_zsh() {
 
 configure_zsh() {
   info "Configuring ZSH"
-  # Install Antigen - https://github.com/zsh-users/antigen
-  mkdir -p $HOME/.antigen
-  curl -L git.io/antigen > $HOME/.antigen/antigen.zsh
+  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
 
   wget https://github.com/MichielVanderlee/system_config/raw/master/.zshrc -O $HOME/.zshrc
   wget https://github.com/MichielVanderlee/system_config/raw/master/.p10k.zsh -O $HOME/.p10k.zsh
@@ -270,9 +267,8 @@ configure_vim() {
 
 install_tmux() {
   info "Installing Tmux"
-  install_adsf
-
-  asdf_install tmux
+  
+  sudo apt install -y tmux
 
   info "Installed Tmux"
 }
@@ -302,15 +298,22 @@ install_tools() {
   asdf_install maven
   asdf_install ruby
 
+  # install Rust
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
   info "Installing nodejs"
   ## Install NVM because that's what I use on windows, so don't mix commands to switch node versions
   # asdf plugin-add nodejs
   # asdf install nodejs latest:12
   # asdf global nodejs "$(asdf latest nodejs 12)"
-  wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+  # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip awscliv2.zip
+  sudo ./aws/install
 
   pip install \
-    awscli \
     pgcli
 
   brew install pspg
@@ -326,6 +329,7 @@ install_tools() {
   # colorls
   info "Installing colorls"
   $(asdf which gem) install colorls
+  asdf reshim
 
   # ammonite-repl
   sudo curl -L https://github.com/lihaoyi/Ammonite/releases/download/1.6.9/2.13-1.6.9 -o /usr/local/bin/amm
@@ -375,21 +379,20 @@ install_docker() {
   
   install_homebrew
 
-  sudo apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg2 \
-    software-properties-common
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository -y \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) \
-    stable"
-  sudo apt-get update
-  sudo apt-get install -y docker-ce
+  sudo apt-get install ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-  sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  # Add the repository to Apt sources:
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  sudo curl -L "https://github.com/docker/compose/releases/download/v2.30.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
 
   sudo usermod -aG docker $USER
@@ -425,7 +428,7 @@ configure_gnome_theme(){
   CURRENT_FONT=$(gsettings get org.gnome.desktop.interface monospace-font-name)
   if [ "$CURRENT_FONT" != "'FiraCode Nerd Font 11'" ]; then
     info "Install Fonts"
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/FiraCode.zip
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip
     mkdir -p $HOME/.fonts/truetype/FiraCode
     unzip FiraCode.zip -d $HOME/.fonts/truetype/FiraCode
 

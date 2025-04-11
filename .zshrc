@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
 # https://github.com/neovim/neovim/issues/6134#issuecomment-1086666499
@@ -16,37 +18,35 @@ include () {
     [[ -f "$1" ]] && source "$1"
 }
 
-# Antigen
-export _ANTIGEN_INSTALL_DIR=~/.antigen
+# pyenv before antidote to ensure we don't get "command not found: python"
+if [ -d $HOME/.pyenv ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    if command -v pyenv 1>/dev/null 2>&1; then
+        eval "$(pyenv init -)"
+        eval "$(pyenv virtualenv-init -)"
+    fi
 
-include ~/.powerlevel9k
-
-if [ -f $_ANTIGEN_INSTALL_DIR/antigen.zsh ]; then
-    source $_ANTIGEN_INSTALL_DIR/antigen.zsh
-
-    antigen use ohmyzsh/ohmyzsh
-    # antigen bundle aws # doesn't work with pyenv
-    antigen bundle asdf
-    antigen bundle git
-    antigen bundle pip
-    antigen bundle docker
-    antigen bundle docker-compose
-    antigen bundle jsontools
-    antigen bundle kubectl
-    antigen bundle poetry
-    antigen bundle tmux
-    antigen bundle zsh-users/zsh-autosuggestions
-    antigen bundle zsh-users/zsh-completions
-    antigen bundle RobSis/zsh-completion-generator
-
-    # Syntax highlighting bundle
-    antigen bundle zsh-users/zsh-syntax-highlighting
-
-    antigen theme romkatv/powerlevel10k
-
-    antigen apply
+    if [ -f "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh" ]; then
+        source "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh"
+    fi
 fi
-# END Antigen
+
+
+# region - Antidote
+export _ANTIDOTE_INSTALL_DIR=~/.antidote
+# If antidote exists, apply it.
+if [ -f $_ANTIDOTE_INSTALL_DIR/antidote.zsh ]; then
+    source $_ANTIDOTE_INSTALL_DIR/antidote.zsh
+
+    antidote load
+fi
+# endregion - Antidote
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # zsh-syntax-highlighting
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
@@ -86,20 +86,6 @@ function zsh_ignore_git() {
 	git config --add oh-my-zsh.hide-status 1
 	git config --add oh-my-zsh.hide-dirty 1
 }
-
-if [ -d $HOME/.pyenv ]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    if command -v pyenv 1>/dev/null 2>&1; then
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
-
-    if [ -f "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh" ]; then
-        source "$PYENV_ROOT/versions/$(cat $PYENV_ROOT/version)/bin/aws_zsh_completer.sh"
-    fi
-fi
-
 
 # Do these last in case they include things used above, e.g.: $PYENV_ROOT
 include ~/.export
